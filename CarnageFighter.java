@@ -142,7 +142,10 @@ public class CarnageFighter extends ActiveScript implements PaintListener{
     	startAtk = Skills.getRealLevel(Skills.ATTACK);
     	startDef = Skills.getRealLevel(Skills.DEFENSE);
     	startHP = Skills.getRealLevel(Skills.CONSTITUTION);
-    	provide(new Attack(), new Eat(), new Prayers());
+    	provide(new AntiBan());
+    	provide(new Attack());
+    	provide(new Eat());
+    	provide(new Prayers());
     }
     
     private class AntiBan extends Node{
