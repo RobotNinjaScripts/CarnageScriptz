@@ -102,9 +102,11 @@ public class CarnageFighter extends ActiveScript implements PaintListener{
     private boolean antiban = false;
     private boolean eat = false;
     private boolean prayers = false;
+    private boolean usePrayers = false;
     private boolean protectMeele = false;
     private boolean protectRanged = false;
     private boolean protectMagic = false;
+    private boolean changeAttackStyle;
     
     private int strLvl = 0;
     private int defLvl = 0;
@@ -160,11 +162,19 @@ public class CarnageFighter extends ActiveScript implements PaintListener{
 			if(whichAntiban == 0){
 				Camera.setAngle(50);
 				whichAntiban = 1;
+				combat = true;
+				eat = false;
+				usePrayers = false;
+				antiban = false;
 			}else if(whichAntiban == 1){
 				Tabs.FRIENDS.open();
 				Task.sleep(5000, 6000);
 				Tabs.INVENTORY.open();
 				whichAntiban = 0;
+				combat = true;
+				eat = false;
+				usePrayers = false;
+				antiban = false;
 			}
 		}
     }
@@ -177,34 +187,46 @@ public class CarnageFighter extends ActiveScript implements PaintListener{
 		
 		@Override
 		public void execute() {
+			if(Players.getLocal().getHpPercent() > eatPercent){
+				antiban = false;
+				eat = true;
+				usePrayers = false;
+				combat = false;
+			}
 			if(attackStyle.equals("Strength (Aggressive)")){
-	    		final WidgetChild strengthClick = Widgets.get(884, 8);
-	    		Tabs.ATTACK.open();
-	    		if(strengthClick.validate()){
-	    			strengthClick.click(true);
-	    			Tabs.INVENTORY.open();
-	    		}
-	    	}else if(attackStyle.equals("Defensive (Block)")){
-	    		final WidgetChild defenseClick = Widgets.get(884, 10);
-	    		Tabs.ATTACK.open();
-	    		if(defenseClick.validate()){
-	    			defenseClick.click(true);
-	    			Tabs.INVENTORY.open();
-	    		}
-	    		Tabs.INVENTORY.open();
-	    	}else if(attackStyle.equals("Attack  (Accurate)")){
-	 	  		final WidgetChild attackClick = Widgets.get(884, 7);
-	 	  		Tabs.ATTACK.open();
-	 	  		if(attackClick.validate()){
-	    			attackClick.click(true);
-	    			Tabs.INVENTORY.open();
-	    		}
-	 	  		Tabs.INVENTORY.open();
-	    	}
+				if(changeAttackStyle){
+					final WidgetChild strengthClick = Widgets.get(884, 8);
+					Tabs.ATTACK.open();
+					if(strengthClick.validate()){
+						strengthClick.click(true);
+						Tabs.INVENTORY.open();
+					}
+				}
+			}else if(attackStyle.equals("Defensive (Block)")){
+				if(changeAttackStyle){
+					final WidgetChild defenseClick = Widgets.get(884, 10);
+					Tabs.ATTACK.open();
+					if(defenseClick.validate()){
+						defenseClick.click(true);
+						Tabs.INVENTORY.open();
+					}
+					Tabs.INVENTORY.open();
+				}
+			}else if(attackStyle.equals("Attack  (Accurate)")){
+				if(changeAttackStyle){
+					final WidgetChild attackClick = Widgets.get(884, 7);
+					Tabs.ATTACK.open();
+					if(attackClick.validate()){
+						attackClick.click(true);
+						Tabs.INVENTORY.open();
+					}
+					Tabs.INVENTORY.open();
+				}
+			}
 			HPLvl = 999;
 			if(Inventory.getCount(foodId) == 0){
 				log.severe("[CarnageFighter] Out of Food, the script will now stop.");
-				stop();
+				
 			}
 			if (!Players.getLocal().isInCombat()){
 				if (Players.getLocal().getHpPercent() < eatPercent){
@@ -247,6 +269,12 @@ public class CarnageFighter extends ActiveScript implements PaintListener{
 
 		@Override
 		public void execute() {
+			if(Players.getLocal().getHpPercent() > eatPercent){
+				combat = true;
+				eat = false;
+				usePrayers = false;
+				antiban = false;
+			}
 			totalGainedLevels = 99999;
 			if (Players.getLocal().getHpPercent() < eatPercent){
 				final Item food = Inventory.getItem(foodId);
@@ -265,29 +293,42 @@ public class CarnageFighter extends ActiveScript implements PaintListener{
 
 		@Override
 		public boolean activate() {
-			return prayers;
+			return prayers && usePrayers;
 		}
 
 		@Override
 		public void execute() {
 			totalGainedLevels = 111111;
-			if (Players.getLocal().isInCombat()){
-				if(prayers){
-					if(protectMeele){
-						Tabs.PRAYER.open();
-						final WidgetChild meeleClick = Widgets.get(7, 19);
-						meeleClick.click(true);
-					}
-					if(protectRanged){
-						Tabs.PRAYER.open();
-						final WidgetChild rangedClick = Widgets.get(7, 18);
-						rangedClick.click(true);
-					}
-					if(protectMagic){
-						Tabs.PRAYER.open();
-						final WidgetChild magicClick = Widgets.get(7, 19);
-						magicClick.click(true);
-					}
+			if(prayers){
+				if(protectMeele){
+					Tabs.PRAYER.open();
+					final WidgetChild meeleClick = Widgets.get(7, 19);
+					meeleClick.click(true);
+					Tabs.INVENTORY.open();
+					combat = true;
+					eat = false;
+					usePrayers = false;
+					antiban = false;
+				}
+				if(protectRanged){
+					Tabs.PRAYER.open();
+					final WidgetChild rangedClick = Widgets.get(7, 18);
+					rangedClick.click(true);
+					Tabs.INVENTORY.open();
+					combat = true;
+					eat = false;
+					usePrayers = false;
+					antiban = false;
+				}
+				if(protectMagic){
+					Tabs.PRAYER.open();
+					final WidgetChild magicClick = Widgets.get(7, 19);
+					magicClick.click(true);
+					Tabs.INVENTORY.open();
+					combat = true;
+					eat = false;
+					usePrayers = false;
+					antiban = false;
 				}
 			}
 		}
@@ -678,10 +719,17 @@ public class CarnageFighter extends ActiveScript implements PaintListener{
 	        protectRanged = jRadioButton2.isSelected();
 	        protectMagic = jRadioButton3.isSelected();
 	        eatPercent = jSlider1.getValue();
-	        combat = true;
+	        combat = false;
 	        check = true;
-	        antiban = true;
-	        eat = true;
+	        antiban = false;
+	        eat = false;
+	        if(!jCheckBox1.isSelected()){
+	        	antiban = true;
+	        	usePrayers = false;
+	        }else if(jCheckBox1.isSelected()){
+	        	antiban = false;
+	        	usePrayers = true;
+	        }
 	        dispose();
 	    }
 
