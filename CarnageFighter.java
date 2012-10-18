@@ -143,25 +143,6 @@ public class CarnageFighter extends ActiveScript implements PaintListener{
     	startDef = Skills.getRealLevel(Skills.DEFENSE);
     	startHP = Skills.getRealLevel(Skills.CONSTITUTION);
     	provide(new Attack(), new Eat(), new Prayers());
-    	Task.sleep(20000, 35000);
-    	if(attackStyle.equals("Strength (Aggressive)")){
-    		final WidgetChild strengthClick = Widgets.get(884, 8);
-    		Tabs.ATTACK.open();
-    		strengthClick.click(true);
-			Tabs.INVENTORY.open();
-    	}
-    	if(attackStyle.equals("Defensive (Block)")){
-    		final WidgetChild defenseClick = Widgets.get(884, 10);
-    		Tabs.ATTACK.open();
-    		defenseClick.click(true);
-    		Tabs.INVENTORY.open();
-    	}
-    	if(attackStyle.equals("Attack  (Accurate)")){
-    		final WidgetChild attackClick = Widgets.get(884, 7);
-    		Tabs.ATTACK.open();
-    		attackClick.click(true);
-			Tabs.INVENTORY.open();
-    	}
     }
     
     private class AntiBan extends Node{
@@ -193,7 +174,35 @@ public class CarnageFighter extends ActiveScript implements PaintListener{
 		
 		@Override
 		public void execute() {
+			if(attackStyle.equals("Strength (Aggressive)")){
+	    		final WidgetChild strengthClick = Widgets.get(884, 8);
+	    		Tabs.ATTACK.open();
+	    		if(strengthClick.validate()){
+	    			strengthClick.click(true);
+	    			Tabs.INVENTORY.open();
+	    		}
+	    	}else if(attackStyle.equals("Defensive (Block)")){
+	    		final WidgetChild defenseClick = Widgets.get(884, 10);
+	    		Tabs.ATTACK.open();
+	    		if(defenseClick.validate()){
+	    			defenseClick.click(true);
+	    			Tabs.INVENTORY.open();
+	    		}
+	    		Tabs.INVENTORY.open();
+	    	}else if(attackStyle.equals("Attack  (Accurate)")){
+	 	  		final WidgetChild attackClick = Widgets.get(884, 7);
+	 	  		Tabs.ATTACK.open();
+	 	  		if(attackClick.validate()){
+	    			attackClick.click(true);
+	    			Tabs.INVENTORY.open();
+	    		}
+	 	  		Tabs.INVENTORY.open();
+	    	}
 			HPLvl = 999;
+			if(Inventory.getCount(foodId) == 0){
+				log.severe("[CarnageFighter] Out of Food, the script will now stop.");
+				stop();
+			}
 			if (!Players.getLocal().isInCombat()){
 				if (Players.getLocal().getHpPercent() < eatPercent){
 					final Item food = Inventory.getItem(foodId);
