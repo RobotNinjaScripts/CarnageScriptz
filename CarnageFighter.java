@@ -302,8 +302,10 @@ public class CarnageFighter extends ActiveScript implements PaintListener{
 			if(prayers){
 				if(protectMeele){
 					Tabs.PRAYER.open();
-					final WidgetChild meeleClick = Widgets.get(7, 19);
-					meeleClick.click(true);
+					final WidgetChild meeleClick = Widgets.get(PARENT).getChild(CHILD).getChild(INNER_CHILD);
+					if(meeleClick.validate()){
+						meeleClick.click(true);
+					}
 					Tabs.INVENTORY.open();
 					combat = true;
 					eat = false;
@@ -312,8 +314,10 @@ public class CarnageFighter extends ActiveScript implements PaintListener{
 				}
 				if(protectRanged){
 					Tabs.PRAYER.open();
-					final WidgetChild rangedClick = Widgets.get(7, 18);
-					rangedClick.click(true);
+					final WidgetChild rangedClick = Widgets.get(PARENT).getChild(CHILD).getChild(INNER_CHILD);
+					if(rangedClick.validate()){
+						rangedClick.click(true);
+					}
 					Tabs.INVENTORY.open();
 					combat = true;
 					eat = false;
@@ -322,8 +326,10 @@ public class CarnageFighter extends ActiveScript implements PaintListener{
 				}
 				if(protectMagic){
 					Tabs.PRAYER.open();
-					final WidgetChild magicClick = Widgets.get(7, 19);
-					magicClick.click(true);
+					final WidgetChild magicClick = Widgets.get(PARENT).getChild(CHILD).getChild(INNER_CHILD);
+					if(magicClick.validate()){
+						magicClick.click(true);
+					}
 					Tabs.INVENTORY.open();
 					combat = true;
 					eat = false;
@@ -490,11 +496,6 @@ public class CarnageFighter extends ActiveScript implements PaintListener{
 	        });
 
 	        jTextField2.setText("Food id goes here :)");
-	        jTextField2.addActionListener(new java.awt.event.ActionListener() {
-	            public void actionPerformed(java.awt.event.ActionEvent evt) {
-	                jTextField2ActionPerformed(evt);
-	            }
-	        });
 
 	        jSlider1.setMajorTickSpacing(20);
 	        jSlider1.setMinorTickSpacing(5);
@@ -723,6 +724,7 @@ public class CarnageFighter extends ActiveScript implements PaintListener{
 	        check = true;
 	        antiban = false;
 	        eat = false;
+	        foodId = Integer.parseInt(jTextField2.getText());
 	        if(!jCheckBox1.isSelected()){
 	        	antiban = true;
 	        	usePrayers = false;
@@ -762,10 +764,6 @@ public class CarnageFighter extends ActiveScript implements PaintListener{
 
 	    private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {
 	        // TODO add your handling code here:
-	    }
-
-	    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {
-	    	foodId = Integer.parseInt(jTextField2.getText());
 	    }
 
 	    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {
