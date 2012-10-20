@@ -198,6 +198,19 @@ public class CarnageDungeon extends ActiveScript implements PaintListener{
 			}else if(floorSizeBox.equals("Large")){
 				dungeonSize = 3;
 			}
+			if(complexityBox.equals("1")){
+				complexity = 1;
+			}else if(complexityBox.equals("2")){
+				complexity = 2;
+			}else if(complexityBox.equals("3")){
+				complexity = 3;
+			}else if(complexityBox.equals("4")){
+				complexity = 4;
+			}else if(complexityBox.equals("5")){
+				complexity = 5;
+			}else if(complexityBox.equals("6")){
+				complexity = 6;
+			}
 			dispose();
 		}
 
