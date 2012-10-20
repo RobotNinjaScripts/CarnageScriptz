@@ -1,7 +1,11 @@
-import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.awt.*;
+
+import javax.imageio.ImageIO;
+import java.io.IOException;
+import java.net.URL;
 
 import org.powerbot.core.event.listeners.PaintListener;
 import org.powerbot.core.script.ActiveScript;
@@ -11,6 +15,7 @@ import org.powerbot.core.script.job.state.Tree;
 import org.powerbot.game.api.Manifest;
 import org.powerbot.game.api.methods.Game;
 import org.powerbot.game.api.methods.Widgets;
+import org.powerbot.game.api.methods.input.Mouse;
 import org.powerbot.game.api.methods.node.SceneEntities;
 import org.powerbot.game.api.methods.tab.Inventory;
 import org.powerbot.game.api.methods.tab.Skills;
@@ -22,9 +27,20 @@ import org.powerbot.game.api.wrappers.widget.WidgetChild;
 @Manifest (authors = { "xCarnag3x, RobotNinja" }, name = "CarnageDungeon", description = "The Best Dungeoneering bot. Ever.", website = "", version = 0.1, vip = false)
 public class CarnageDungeon extends ActiveScript implements PaintListener{
 
+	private final Color color2 = new Color(255, 0, 0);
+	
 	@Override
-	public void onRepaint(Graphics arg0) {
-		// TODO Paint.
+	public void onRepaint(Graphics g1) {
+		Graphics2D g = (Graphics2D)g1;
+		g.setColor(color2);
+        g.drawLine(Mouse.getLocation().x - 3000, Mouse.getLocation().y,
+        		Mouse.getLocation().x + 3000, Mouse.getLocation().y);
+        		g.drawLine(Mouse.getLocation
+
+        		().x, Mouse.getLocation().y - 3000,
+        						
+
+        		Mouse.getLocation().x, Mouse.getLocation().y + 3000);
 	}
 	
 	@Override
@@ -57,21 +73,21 @@ public class CarnageDungeon extends ActiveScript implements PaintListener{
 	private boolean makeParty = true;
 	private boolean enter = true;
 	
-	public final WidgetChild floorNumber = Widgets.get(947, 765);
-	public final WidgetChild confirmFloor = Widgets.get(947, 766);
-	public final WidgetChild confirmComplex = Widgets.get(938, 39);
-	public final WidgetChild changeComplex = Widgets.get(939, 102);
-	public final WidgetChild changeFloor = Widgets.get(939, 108);
-	public final WidgetChild formParty = Widgets.get(939, 13);
-	public final WidgetChild smallDungeon = Widgets.get(1188, 3);
-	public final WidgetChild mediumDungeon = Widgets.get(1188, 3);
-	public final WidgetChild largeDungeon = Widgets.get(1188, 3);
-	public final WidgetChild complex1 = Widgets.get(938, 60);
-	public final WidgetChild complex2 = Widgets.get(938, 61);
-	public final WidgetChild complex3 = Widgets.get(938, 66);
-	public final WidgetChild complex4 = Widgets.get(938, 71);
-	public final WidgetChild complex5 = Widgets.get(938, 76);
-	public final WidgetChild complex6 = Widgets.get(938, 81);
+	final WidgetChild floorNumber = Widgets.get(947, 765);
+	final WidgetChild confirmFloor = Widgets.get(947, 766);
+	final WidgetChild confirmComplex = Widgets.get(938, 39);
+	final WidgetChild changeComplex = Widgets.get(939, 102);
+	final WidgetChild changeFloor = Widgets.get(939, 108);
+	final WidgetChild formParty = Widgets.get(939, 13);
+	final WidgetChild smallDungeon = Widgets.get(1188, 3);
+	final WidgetChild mediumDungeon = Widgets.get(1188, 24);
+	final WidgetChild largeDungeon = Widgets.get(1188, 14);
+	final WidgetChild complex1 = Widgets.get(938, 60);
+	final WidgetChild complex2 = Widgets.get(938, 61);
+	final WidgetChild complex3 = Widgets.get(938, 66);
+	final WidgetChild complex4 = Widgets.get(938, 71);
+	final WidgetChild complex5 = Widgets.get(938, 76);
+	final WidgetChild complex6 = Widgets.get(938, 81);
 	
 	private class EnterDungeon extends Node{
 
@@ -128,11 +144,17 @@ public class CarnageDungeon extends ActiveScript implements PaintListener{
 			confirmComplex.click(true);
 			Task.sleep(1000);
 			if(dungeonSize == 1){
-				smallDungeon.click(true);
+				if(smallDungeon.validate()){
+					smallDungeon.click(true);
+				}
 			}else if(dungeonSize == 2){
-				mediumDungeon.click(true);
+				if(mediumDungeon.validate()){
+					mediumDungeon.click(true);
+				}
 			}else if(dungeonSize == 3){
-				largeDungeon.click(true);
+				if(largeDungeon.validate()){
+					largeDungeon.click(true);
+				}
 			}
 		}
 	}
