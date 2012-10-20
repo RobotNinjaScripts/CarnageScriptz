@@ -226,6 +226,7 @@ public class CarnageFighter extends ActiveScript implements PaintListener{
 			HPLvl = 999;
 			if(Inventory.getCount(foodId) == 0){
 				log.severe("[CarnageFighter] Out of Food, the script will now stop.");
+				stop();
 				
 			}
 			if (!Players.getLocal().isInCombat()){
@@ -302,7 +303,7 @@ public class CarnageFighter extends ActiveScript implements PaintListener{
 			if(prayers){
 				if(protectMeele){
 					Tabs.PRAYER.open();
-					final WidgetChild meeleClick = Widgets.get(PARENT).getChild(CHILD).getChild(INNER_CHILD);
+					final WidgetChild meeleClick = Widgets.get(271).getChild(7).getChild(19);
 					if(meeleClick.validate()){
 						meeleClick.click(true);
 					}
@@ -314,7 +315,7 @@ public class CarnageFighter extends ActiveScript implements PaintListener{
 				}
 				if(protectRanged){
 					Tabs.PRAYER.open();
-					final WidgetChild rangedClick = Widgets.get(PARENT).getChild(CHILD).getChild(INNER_CHILD);
+					final WidgetChild rangedClick = Widgets.get(271).getChild(7).getChild(18);
 					if(rangedClick.validate()){
 						rangedClick.click(true);
 					}
@@ -326,7 +327,7 @@ public class CarnageFighter extends ActiveScript implements PaintListener{
 				}
 				if(protectMagic){
 					Tabs.PRAYER.open();
-					final WidgetChild magicClick = Widgets.get(PARENT).getChild(CHILD).getChild(INNER_CHILD);
+					final WidgetChild magicClick = Widgets.get(271).getChild(7).getChild(17);
 					if(magicClick.validate()){
 						magicClick.click(true);
 					}
