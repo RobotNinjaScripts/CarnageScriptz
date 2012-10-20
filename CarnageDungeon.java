@@ -52,6 +52,7 @@ public class CarnageDungeon extends ActiveScript implements PaintListener{
 	private static int ringOfKinship = (15707);
 	private int dungeoneeringLevel;
 	private int complexity = 6;
+	private int dungeonSize = 1;
 	
 	private boolean makeParty = true;
 	private boolean enter = true;
@@ -63,6 +64,8 @@ public class CarnageDungeon extends ActiveScript implements PaintListener{
 	public final WidgetChild changeFloor = Widgets.get(939, 108);
 	public final WidgetChild formParty = Widgets.get(939, 13);
 	public final WidgetChild smallDungeon = Widgets.get(1188, 3);
+	public final WidgetChild mediumDungeon = Widgets.get(1188, 3);
+	public final WidgetChild largeDungeon = Widgets.get(1188, 3);
 	public final WidgetChild complex1 = Widgets.get(938, 60);
 	public final WidgetChild complex2 = Widgets.get(938, 61);
 	public final WidgetChild complex3 = Widgets.get(938, 66);
@@ -124,7 +127,13 @@ public class CarnageDungeon extends ActiveScript implements PaintListener{
 			Task.sleep(500);
 			confirmComplex.click(true);
 			Task.sleep(1000);
-			smallDungeon.click(true);
+			if(dungeonSize == 1){
+				smallDungeon.click(true);
+			}else if(dungeonSize == 2){
+				mediumDungeon.click(true);
+			}else if(dungeonSize == 3){
+				largeDungeon.click(true);
+			}
 		}
 	}
 	
