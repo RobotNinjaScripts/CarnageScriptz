@@ -2,10 +2,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 
-import javax.imageio.ImageIO;
-import java.io.IOException;
-import java.net.URL;
+import javax.swing.*;
+import javax.swing.border.*;
 
 import org.powerbot.core.event.listeners.PaintListener;
 import org.powerbot.core.script.ActiveScript;
@@ -51,6 +51,11 @@ public class CarnageDungeon extends ActiveScript implements PaintListener{
 		}
 		Task.sleep(10);
 		dungeoneeringLevel = Skills.getRealLevel(Skills.DUNGEONEERING);
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				new CarnageDungeonGUI().setVisible(true);
+			}
+		});
 		provide(new EnterDungeon());
 	}
 	
@@ -72,6 +77,8 @@ public class CarnageDungeon extends ActiveScript implements PaintListener{
 	
 	private boolean makeParty = true;
 	private boolean enter = true;
+	public boolean prayers;       // TODO booleans
+	public boolean prestige;
 	
 	final WidgetChild floorNumber = Widgets.get(947, 765);
 	final WidgetChild confirmFloor = Widgets.get(947, 766);
@@ -170,5 +177,326 @@ public class CarnageDungeon extends ActiveScript implements PaintListener{
 			}
 		}
 		return Random.nextInt(10, 50);
+	}
+	
+	public class CarnageDungeonGUI extends JFrame {
+		public CarnageDungeonGUI() {
+			initComponents();
+		}
+		
+		private void startButtonActionPerformed(ActionEvent e) {
+			if(usePrayers.isSelected()){
+				prayers = true;
+			}
+			if(prestigeBox.isSelected()){
+				prestige = true;
+			}
+			if(floorSizeBox.equals("Small")){
+				dungeonSize = 1;
+			}else if(floorSizeBox.equals("Medium")){
+				dungeonSize = 2;
+			}else if(floorSizeBox.equals("Large")){
+				dungeonSize = 3;
+			}
+			dispose();
+		}
+
+		private void initComponents() {
+			titlePanel = new JPanel();
+			mainTitle = new JLabel();
+			subTitle = new JLabel();
+			mainPanel = new JPanel();
+			leftPanel = new JPanel();
+			usePrayers = new JCheckBox();
+			combatStyle = new JCheckBox();
+			upgradeArmour = new JCheckBox();
+			upgradeWeapons = new JCheckBox();
+			makeFood = new JCheckBox();           // TODO booleans
+			exploreDungeon = new JCheckBox();
+			startPanel = new JPanel();
+			startButton = new JButton();
+			developerMode = new JCheckBox();
+			rightPanel = new JPanel();
+			complexityText = new JLabel();
+			complexityBox = new JComboBox<>();
+			floorSizeText = new JLabel();
+			floorSizeBox = new JComboBox<>();
+			prestigeBox = new JCheckBox();
+
+			//======== this ========
+			setTitle("CarnageDungeon - Version 0.01");
+			setResizable(false);
+			Container contentPane = getContentPane();
+
+			//======== titlePanel ========
+			{
+				titlePanel.setBorder(LineBorder.createBlackLineBorder());
+
+				//---- mainTitle ----
+				mainTitle.setText("CarnageDungeon");
+				mainTitle.setFont(new Font("Arial", Font.BOLD, 30));
+				mainTitle.setHorizontalAlignment(SwingConstants.CENTER);
+
+				//---- subTitle ----
+				subTitle.setText("By xCarnag3x and RobotNinja");
+				subTitle.setFont(new Font("Arial", Font.PLAIN, 14));
+				subTitle.setHorizontalAlignment(SwingConstants.CENTER);
+
+				GroupLayout titlePanelLayout = new GroupLayout(titlePanel);
+				titlePanel.setLayout(titlePanelLayout);
+				titlePanelLayout.setHorizontalGroup(
+					titlePanelLayout.createParallelGroup()
+						.addComponent(subTitle, GroupLayout.PREFERRED_SIZE, 506, GroupLayout.PREFERRED_SIZE)
+						.addComponent(mainTitle, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+				);
+				titlePanelLayout.setVerticalGroup(
+					titlePanelLayout.createParallelGroup()
+						.addGroup(titlePanelLayout.createSequentialGroup()
+							.addGap(10, 10, 10)
+							.addComponent(mainTitle)
+							.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+							.addComponent(subTitle)
+							.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+				);
+			}
+
+			//======== mainPanel ========
+			{
+				mainPanel.setBorder(LineBorder.createBlackLineBorder());
+
+				//======== leftPanel ========
+				{
+					leftPanel.setBorder(LineBorder.createBlackLineBorder());
+
+					//---- usePrayers ----
+					usePrayers.setText("Use Prayers");
+					usePrayers.setFont(usePrayers.getFont().deriveFont(usePrayers.getFont().getSize() + 1f));
+
+					//---- combatStyle ----
+					combatStyle.setText("Change Combat Style");
+					combatStyle.setFont(combatStyle.getFont().deriveFont(combatStyle.getFont().getSize() + 1f));
+
+					//---- upgradeArmour ----
+					upgradeArmour.setText("Upgrade Armour");
+					upgradeArmour.setFont(upgradeArmour.getFont().deriveFont(upgradeArmour.getFont().getSize() + 1f));
+
+					//---- upgradeWeapons ----
+					upgradeWeapons.setText("Upgrade Weapons");
+					upgradeWeapons.setFont(upgradeWeapons.getFont().deriveFont(upgradeWeapons.getFont().getSize() + 1f));
+
+					//---- makeFood ----
+					makeFood.setText("Make Food");
+					makeFood.setFont(makeFood.getFont().deriveFont(makeFood.getFont().getSize() + 1f));
+
+					//---- exploreDungeon ----
+					exploreDungeon.setText("Explore Dungeon");
+					exploreDungeon.setFont(exploreDungeon.getFont().deriveFont(exploreDungeon.getFont().getSize() + 1f));
+
+					GroupLayout leftPanelLayout = new GroupLayout(leftPanel);
+					leftPanel.setLayout(leftPanelLayout);
+					leftPanelLayout.setHorizontalGroup(
+						leftPanelLayout.createParallelGroup()
+							.addGroup(leftPanelLayout.createSequentialGroup()
+								.addContainerGap()
+								.addGroup(leftPanelLayout.createParallelGroup()
+									.addComponent(usePrayers, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+									.addComponent(combatStyle, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+									.addComponent(upgradeArmour, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+									.addComponent(upgradeWeapons, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+									.addComponent(makeFood, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+									.addComponent(exploreDungeon, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+								.addContainerGap())
+					);
+					leftPanelLayout.setVerticalGroup(
+						leftPanelLayout.createParallelGroup()
+							.addGroup(leftPanelLayout.createSequentialGroup()
+								.addContainerGap()
+								.addComponent(usePrayers, GroupLayout.PREFERRED_SIZE, 37, GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+								.addComponent(combatStyle, GroupLayout.PREFERRED_SIZE, 37, GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+								.addComponent(upgradeArmour, GroupLayout.PREFERRED_SIZE, 37, GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+								.addComponent(upgradeWeapons, GroupLayout.PREFERRED_SIZE, 37, GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+								.addComponent(makeFood, GroupLayout.PREFERRED_SIZE, 37, GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+								.addComponent(exploreDungeon, GroupLayout.PREFERRED_SIZE, 37, GroupLayout.PREFERRED_SIZE)
+								.addContainerGap(17, Short.MAX_VALUE))
+					);
+				}
+
+				//======== startPanel ========
+				{
+					startPanel.setBorder(LineBorder.createBlackLineBorder());
+
+					//---- startButton ----
+					startButton.setText("Start");
+					startButton.setFont(new Font("Arial", Font.BOLD, 20));
+
+					//---- developerMode ----
+					developerMode.setText("Developer Mode");
+					developerMode.setFont(developerMode.getFont().deriveFont(developerMode.getFont().getSize() + 4f));
+
+					GroupLayout startPanelLayout = new GroupLayout(startPanel);
+					startPanel.setLayout(startPanelLayout);
+					startPanelLayout.setHorizontalGroup(
+						startPanelLayout.createParallelGroup()
+							.addGroup(startPanelLayout.createSequentialGroup()
+								.addContainerGap()
+								.addComponent(startButton, GroupLayout.PREFERRED_SIZE, 206, GroupLayout.PREFERRED_SIZE)
+								.addGap(29, 29, 29)
+								.addComponent(developerMode)
+								.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+					);
+					startPanelLayout.setVerticalGroup(
+						startPanelLayout.createParallelGroup()
+							.addGroup(startPanelLayout.createSequentialGroup()
+								.addGap(9, 9, 9)
+								.addGroup(startPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+									.addComponent(developerMode, GroupLayout.PREFERRED_SIZE, 37, GroupLayout.PREFERRED_SIZE)
+									.addComponent(startButton, GroupLayout.PREFERRED_SIZE, 37, GroupLayout.PREFERRED_SIZE))
+								.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+					);
+				}
+
+				//======== rightPanel ========
+				{
+					rightPanel.setBorder(LineBorder.createBlackLineBorder());
+
+					//---- complexityText ----
+					complexityText.setText("Complexity");
+					complexityText.setHorizontalAlignment(SwingConstants.CENTER);
+					complexityText.setFont(complexityText.getFont().deriveFont(complexityText.getFont().getSize() + 10f));
+
+					//---- complexityBox ----
+					complexityBox.setModel(new DefaultComboBoxModel<>(new String[] {
+						"1",
+						"2",
+						"3",
+						"4",
+						"5",
+						"6"
+					}));
+					complexityBox.setFont(complexityBox.getFont().deriveFont(complexityBox.getFont().getStyle() | Font.BOLD, complexityBox.getFont().getSize() + 3f));
+
+					//---- floorSizeText ----
+					floorSizeText.setText("Floor Size");
+					floorSizeText.setHorizontalAlignment(SwingConstants.CENTER);
+					floorSizeText.setFont(floorSizeText.getFont().deriveFont(floorSizeText.getFont().getSize() + 10f));
+
+					//---- floorSizeBox ----
+					floorSizeBox.setModel(new DefaultComboBoxModel<>(new String[] {
+						"Small",
+						"Medium",
+						"Large"
+					}));
+					floorSizeBox.setFont(floorSizeBox.getFont().deriveFont(floorSizeBox.getFont().getStyle() | Font.BOLD, floorSizeBox.getFont().getSize() + 3f));
+
+					//---- prestigeBox ----
+					prestigeBox.setText("   Prestige");
+					prestigeBox.setFont(prestigeBox.getFont().deriveFont(prestigeBox.getFont().getSize() + 10f));
+
+					GroupLayout rightPanelLayout = new GroupLayout(rightPanel);
+					rightPanel.setLayout(rightPanelLayout);
+					rightPanelLayout.setHorizontalGroup(
+						rightPanelLayout.createParallelGroup()
+							.addGroup(rightPanelLayout.createSequentialGroup()
+								.addContainerGap()
+								.addGroup(rightPanelLayout.createParallelGroup()
+									.addComponent(complexityText, GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+									.addComponent(complexityBox, GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+									.addComponent(floorSizeText, GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+									.addComponent(floorSizeBox, GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+									.addComponent(prestigeBox, GroupLayout.Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE))
+								.addContainerGap())
+					);
+					rightPanelLayout.setVerticalGroup(
+						rightPanelLayout.createParallelGroup()
+							.addGroup(rightPanelLayout.createSequentialGroup()
+								.addContainerGap()
+								.addComponent(complexityText, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+								.addComponent(complexityBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+								.addComponent(floorSizeText, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+								.addComponent(floorSizeBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addGap(18, 18, 18)
+								.addComponent(prestigeBox, GroupLayout.PREFERRED_SIZE, 59, GroupLayout.PREFERRED_SIZE)
+								.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+					);
+				}
+
+				GroupLayout mainPanelLayout = new GroupLayout(mainPanel);
+				mainPanel.setLayout(mainPanelLayout);
+				mainPanelLayout.setHorizontalGroup(
+					mainPanelLayout.createParallelGroup()
+						.addGroup(mainPanelLayout.createSequentialGroup()
+							.addContainerGap()
+							.addGroup(mainPanelLayout.createParallelGroup()
+								.addGroup(mainPanelLayout.createSequentialGroup()
+									.addComponent(leftPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+									.addGap(18, 18, 18)
+									.addComponent(rightPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+								.addComponent(startPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+							.addContainerGap())
+				);
+				mainPanelLayout.setVerticalGroup(
+					mainPanelLayout.createParallelGroup()
+						.addGroup(mainPanelLayout.createSequentialGroup()
+							.addContainerGap()
+							.addGroup(mainPanelLayout.createParallelGroup()
+								.addComponent(leftPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(rightPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+							.addGap(18, 18, 18)
+							.addComponent(startPanel, GroupLayout.DEFAULT_SIZE, 53, Short.MAX_VALUE)
+							.addContainerGap())
+				);
+			}
+
+			GroupLayout contentPaneLayout = new GroupLayout(contentPane);
+			contentPane.setLayout(contentPaneLayout);
+			contentPaneLayout.setHorizontalGroup(
+				contentPaneLayout.createParallelGroup()
+					.addGroup(contentPaneLayout.createSequentialGroup()
+						.addContainerGap()
+						.addGroup(contentPaneLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+							.addComponent(titlePanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+							.addComponent(mainPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+						.addContainerGap(22, Short.MAX_VALUE))
+			);
+			contentPaneLayout.setVerticalGroup(
+				contentPaneLayout.createParallelGroup()
+					.addGroup(contentPaneLayout.createSequentialGroup()
+						.addContainerGap()
+						.addComponent(titlePanel, GroupLayout.PREFERRED_SIZE, 83, GroupLayout.PREFERRED_SIZE)
+						.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+						.addComponent(mainPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addContainerGap(18, Short.MAX_VALUE))
+			);
+			setLocationRelativeTo(getOwner());
+		}
+
+		private JPanel titlePanel;
+		private JLabel mainTitle;
+		private JLabel subTitle;
+		private JPanel mainPanel;
+		private JPanel leftPanel;
+		private JCheckBox usePrayers;
+		private JCheckBox combatStyle;
+		private JCheckBox upgradeArmour;
+		private JCheckBox upgradeWeapons;
+		private JCheckBox makeFood;
+		private JCheckBox exploreDungeon;
+		private JPanel startPanel;
+		private JButton startButton;
+		private JCheckBox developerMode;
+		private JPanel rightPanel;
+		private JLabel complexityText;
+		private JComboBox<String> complexityBox;
+		private JLabel floorSizeText;
+		private JComboBox<String> floorSizeBox;
+		private JCheckBox prestigeBox;
 	}
 }
